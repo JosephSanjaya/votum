@@ -2,6 +2,7 @@ rootProject.name = "Votum"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
+    includeBuild("sjy-build-logic")
     repositories {
         google {
             mavenContent {
@@ -25,6 +26,11 @@ dependencyResolutionManagement {
             }
         }
         mavenCentral()
+    }
+    versionCatalogs {
+        create("sjy") {
+            from(files("sjy-build-logic/gradle/libs.versions.toml"))
+        }
     }
 }
 
