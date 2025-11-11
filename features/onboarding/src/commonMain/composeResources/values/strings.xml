@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_onboard_step1">Your Voice, Your Power</string>
+    <string name="subtitle_onboard_step1">Vote with confidence—secure, transparent, and verified on-chain.</string>
+
+    <string name="title_onboard_step2">Vote. Verify. Trust.</string>
+    <string name="subtitle_onboard_step2">Every vote is recorded immutably on the Polkadot network—proof you can see.</string>
+
+    <string name="title_onboard_step3">Join the Future of Democracy</string>
+    <string name="subtitle_onboard_step3">Be part of a movement where technology protects every citizen’s voice.</string>
+
+    <string name="cta_sign_in_or_sign_up">Sign In or Sign Up</string>
+    <string name="cta_continue_google">Continue with Google</string>
+
+    <string name="title_welcome">Welcome to Votum</string>
+    <string name="subtitle_welcome">A transparent, blockchain-powered voting platform built for trust and civic empowerment.</string>
+
+    <string name="label_agreement_text">
+        By signing up or signing in, you agree to our
+        <a href="terms">Terms of Service</a> and
+        <a href="privacy">Privacy Policy</a>.
+    </string>
+</resources>

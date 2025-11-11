@@ -1,11 +1,18 @@
 plugins {
     alias(sjy.plugins.buildlogic.multiplatform.lib)
     alias(sjy.plugins.buildlogic.multiplatform.cmp)
-    alias(sjy.plugins.buildconfig.kmp)
+}
+
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            implementation(project(":core"))
+        }
+    }
 }
 
 android {
-    namespace = "io.votum.core"
+    namespace = "io.votum.onboarding"
     defaultConfig {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -19,12 +26,4 @@ android {
             )
         }
     }
-}
-
-buildConfig {
-    buildConfigField(
-        "String",
-        "BASE_URL",
-        "\"https://votum-api-production.up.railway.app/\""
-    )
 }
