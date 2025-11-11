@@ -1,0 +1,326 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String   @id @default(uuid())
+  nationalId        String   @unique @map("national_id")
+  email             String   @unique
+  passwordHash      String   @map("password_hash")
+  fullName          String   @map("full_name")
+  dateOfBirth       DateTime @map("date_of_birth")
+  address           String
+  phoneNumber       String   @map("phone_number")
+  publicKey         String   @unique @map("public_key")
+  isVerified        Boolean  @default(false) @map("is_verified")
+  isEligible        Boolean  @default(false) @map("is_eligible")
+  registrationDate  DateTime @default(now()) @map("registration_date")
+  lastLoginDate     DateTime? @map("last_login_date")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  voteRecords       VoteRecord[]
+  auditTrailEntries AuditTrailEntry[]
+  createdElections  Election[] @relation("ElectionCreator")
+
+  @@map("users")
+}
+
+model Election {
+  id                              String        @id @default(uuid())
+  title                           String
+  description                     String
+  startTime                       DateTime      @map("start_time")
+  endTime                         DateTime      @map("end_time")
+  registrationDeadline            DateTime      @map("registration_deadline")
+  electionType                    ElectionType  @map("election_type")
+  status                          ElectionStatus @default(DRAFT)
+  blockchainAddress               String?       @map("blockchain_address")
+  minimumAge                      Int           @default(18) @map("minimum_age")
+  maxVotesPerVoter                Int           @default(1) @map("max_votes_per_voter")
+  allowAbstention                 Boolean       @default(true) @map("allow_abstention")
+  requiresIdentityVerification    Boolean       @default(true) @map("requires_identity_verification")
+  createdBy                       String        @map("created_by")
+  createdAt                       DateTime      @default(now()) @map("created_at")
+  updatedAt                       DateTime      @updatedAt @map("updated_at")
+
+  creator                         User          @relation("ElectionCreator", fields: [createdBy], references: [id])
+  candidates                      Candidate[]
+  voteRecords                     VoteRecord[]
+  electionResults                 ElectionResult?
+  auditTrailEntries               AuditTrailEntry[]
+  electionStatistics              ElectionStatistics?
+  eligibilityCriteria             EligibilityCriteria[]
+
+  @@map("elections")
+}
+
+model Candidate {
+  id              String   @id @default(uuid())
+  electionId      String   @map("election_id")
+  name            String
+  party           String
+  description     String
+  imageUrl        String?  @map("image_url")
+  blockchainIndex Int      @map("blockchain_index")
+  manifesto       String
+  qualifications  String[]
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  election        Election @relation(fields: [electionId], references: [id], onDelete: Cascade)
+  voteRecords     VoteRecord[]
+  candidateResults CandidateResult[]
+
+  @@unique([electionId, blockchainIndex])
+  @@map("candidates")
+}
+
+model VoteRecord {
+  id                      String            @id @default(uuid())
+  electionId              String            @map("election_id")
+  voterId                 String            @map("voter_id")
+  candidateId             String            @map("candidate_id")
+  encryptedVote           String            @map("encrypted_vote")
+  voterSignature          String            @map("voter_signature")
+  transactionHash         String            @unique @map("transaction_hash")
+  blockNumber             BigInt            @map("block_number")
+  blockHash               String            @map("block_hash")
+  gasUsed                 BigInt            @map("gas_used")
+  gasPrice                BigInt            @map("gas_price")
+  timestamp               DateTime          @default(now())
+  isVerified              Boolean           @default(false) @map("is_verified")
+  verificationAttempts    Int               @default(0) @map("verification_attempts")
+  lastVerificationDate    DateTime?         @map("last_verification_date")
+  status                  TransactionStatus @default(PENDING)
+  createdAt               DateTime          @default(now()) @map("created_at")
+
+  election                Election @relation(fields: [electionId], references: [id], onDelete: Cascade)
+  voter                   User     @relation(fields: [voterId], references: [id])
+  candidate               Candidate @relation(fields: [candidateId], references: [id])
+
+  @@unique([electionId, voterId])
+  @@map("vote_records")
+}
+
+model ElectionResult {
+  id                    String   @id @default(uuid())
+  electionId            String   @unique @map("election_id")
+  totalVotesCast        Int      @map("total_votes_cast")
+  totalEligibleVoters   Int      @map("total_eligible_voters")
+  turnoutPercentage     Float    @map("turnout_percentage")
+  winningCandidateId    String?  @map("winning_candidate_id")
+  isFinalized           Boolean  @default(false) @map("is_finalized")
+  finalizedAt           DateTime? @map("finalized_at")
+  blockchainProof       String   @map("blockchain_proof")
+  calculatedAt          DateTime @default(now()) @map("calculated_at")
+  createdAt             DateTime @default(now()) @map("created_at")
+  updatedAt             DateTime @updatedAt @map("updated_at")
+
+  election              Election @relation(fields: [electionId], references: [id], onDelete: Cascade)
+  candidateResults      CandidateResult[]
+
+  @@map("election_results")
+}
+
+model CandidateResult {
+  id                String   @id @default(uuid())
+  electionResultId  String   @map("election_result_id")
+  candidateId       String   @map("candidate_id")
+  voteCount         Int      @map("vote_count")
+  votePercentage    Float    @map("vote_percentage")
+  isWinner          Boolean  @default(false) @map("is_winner")
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  electionResult    ElectionResult @relation(fields: [electionResultId], references: [id], onDelete: Cascade)
+  candidate         Candidate @relation(fields: [candidateId], references: [id])
+
+  @@unique([electionResultId, candidateId])
+  @@map("candidate_results")
+}
+
+model AuditTrailEntry {
+  id                  String      @id @default(uuid())
+  electionId          String?     @map("election_id")
+  action              AuditAction
+  performedBy         String      @map("performed_by")
+  timestamp           DateTime    @default(now())
+  details             Json
+  blockchainReference String?     @map("blockchain_reference")
+  ipAddress           String      @map("ip_address")
+  userAgent           String      @map("user_agent")
+  sessionId           String?     @map("session_id")
+  createdAt           DateTime    @default(now()) @map("created_at")
+
+  election            Election? @relation(fields: [electionId], references: [id], onDelete: SetNull)
+  user                User      @relation(fields: [performedBy], references: [id])
+
+  @@map("audit_trail_entries")
+}
+
+model ElectionStatistics {
+  id                      String   @id @default(uuid())
+  electionId              String   @unique @map("election_id")
+  totalRegisteredVoters   Int      @map("total_registered_voters")
+  totalVotesCast          Int      @map("total_votes_cast")
+  votingProgress          Float    @map("voting_progress")
+  lastUpdated             DateTime @default(now()) @map("last_updated")
+  createdAt               DateTime @default(now()) @map("created_at")
+
+  election                Election @relation(fields: [electionId], references: [id], onDelete: Cascade)
+  hourlyVotingData        HourlyVotingData[]
+  demographicData         DemographicData[]
+  regionResults           RegionResult[]
+
+  @@map("election_statistics")
+}
+
+model HourlyVotingData {
+  id                    String   @id @default(uuid())
+  electionStatisticsId  String   @map("election_statistics_id")
+  hour                  Int
+  voteCount             Int      @map("vote_count")
+  cumulativeVotes       Int      @map("cumulative_votes")
+  timestamp             DateTime @default(now())
+  createdAt             DateTime @default(now()) @map("created_at")
+
+  electionStatistics    ElectionStatistics @relation(fields: [electionStatisticsId], references: [id], onDelete: Cascade)
+
+  @@unique([electionStatisticsId, hour])
+  @@map("hourly_voting_data")
+}
+
+model DemographicData {
+  id                    String   @id @default(uuid())
+  electionStatisticsId  String   @map("election_statistics_id")
+  category              String
+  subcategory           String
+  voterCount            Int      @map("voter_count")
+  percentage            Float
+  createdAt             DateTime @default(now()) @map("created_at")
+
+  electionStatistics    ElectionStatistics @relation(fields: [electionStatisticsId], references: [id], onDelete: Cascade)
+
+  @@unique([electionStatisticsId, category, subcategory])
+  @@map("demographic_data")
+}
+
+model RegionResult {
+  id                    String   @id @default(uuid())
+  electionStatisticsId  String   @map("election_statistics_id")
+  regionId              String   @map("region_id")
+  regionName            String   @map("region_name")
+  totalVotes            Int      @map("total_votes")
+  turnoutPercentage     Float    @map("turnout_percentage")
+  createdAt             DateTime @default(now()) @map("created_at")
+
+  electionStatistics    ElectionStatistics @relation(fields: [electionStatisticsId], references: [id], onDelete: Cascade)
+
+  @@unique([electionStatisticsId, regionId])
+  @@map("region_results")
+}
+
+model EligibilityCriteria {
+  id          String   @id @default(uuid())
+  electionId  String   @map("election_id")
+  criterion   String
+  description String
+  isRequired  Boolean  @default(true) @map("is_required")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  election    Election @relation(fields: [electionId], references: [id], onDelete: Cascade)
+
+  @@map("eligibility_criteria")
+}
+
+model SystemConfiguration {
+  id          String   @id @default(uuid())
+  key         String   @unique
+  value       String
+  description String
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("system_configurations")
+}
+
+model SecurityEvent {
+  id            String            @id @default(uuid())
+  eventType     SecurityEventType @map("event_type")
+  severity      SecuritySeverity
+  description   String
+  ipAddress     String            @map("ip_address")
+  userAgent     String            @map("user_agent")
+  userId        String?           @map("user_id")
+  sessionId     String?           @map("session_id")
+  metadata      Json
+  isResolved    Boolean           @default(false) @map("is_resolved")
+  resolvedAt    DateTime?         @map("resolved_at")
+  resolvedBy    String?           @map("resolved_by")
+  timestamp     DateTime          @default(now())
+  createdAt     DateTime          @default(now()) @map("created_at")
+
+  @@map("security_events")
+}
+
+enum ElectionType {
+  PRESIDENTIAL
+  PARLIAMENTARY
+  LOCAL_GOVERNMENT
+  REFERENDUM
+  PARTY_PRIMARY
+}
+
+enum ElectionStatus {
+  DRAFT
+  REGISTRATION_OPEN
+  REGISTRATION_CLOSED
+  VOTING_ACTIVE
+  VOTING_ENDED
+  RESULTS_PUBLISHED
+  COMPLETED
+  CANCELLED
+}
+
+enum TransactionStatus {
+  PENDING
+  CONFIRMED
+  FAILED
+  REVERTED
+}
+
+enum AuditAction {
+  VOTER_REGISTRATION
+  VOTER_VERIFICATION
+  ELECTION_CREATION
+  ELECTION_UPDATE
+  VOTE_CAST
+  VOTE_VERIFICATION
+  RESULTS_CALCULATION
+  RESULTS_PUBLICATION
+  SYSTEM_ACCESS
+  SECURITY_EVENT
+}
+
+enum SecurityEventType {
+  FAILED_LOGIN
+  SUSPICIOUS_ACTIVITY
+  UNAUTHORIZED_ACCESS
+  DATA_BREACH_ATTEMPT
+  RATE_LIMIT_EXCEEDED
+  INVALID_TOKEN
+  ACCOUNT_LOCKOUT
+}
+
+enum SecuritySeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
