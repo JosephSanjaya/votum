@@ -46,7 +46,7 @@ fun OnboardFooter(
         Text(
             stringResource(text),
             style = MaterialTheme.typography.titleMedium.copy(
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onPrimary
             ),
         )
     }

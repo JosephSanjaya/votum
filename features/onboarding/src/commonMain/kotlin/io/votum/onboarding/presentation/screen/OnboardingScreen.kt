@@ -10,13 +10,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import io.votum.core.presentation.component.rememberSnackBarHostState
 import io.votum.core.presentation.preview.PositionPreviewProvider
 import io.votum.core.presentation.theme.VotumTheme
@@ -115,7 +115,7 @@ private fun OnboardingScreenPreview(
         val uiState =
             OnboardingScreenUiState()
         OnboardingScreenContent(
-            modifier = Modifier.background(Color.White),
+            modifier = Modifier.background(MaterialTheme.colorScheme.background),
             uiState = uiState,
             pagerState = rememberPagerState(currentPage) { uiState.onboardContent.size },
         )

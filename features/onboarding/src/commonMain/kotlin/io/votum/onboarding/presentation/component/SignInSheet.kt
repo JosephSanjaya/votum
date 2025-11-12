@@ -164,7 +164,7 @@ private fun SignInSheetContent(
                 Text(
                     stringResource(Res.string.cta_continue_google),
                     style = MaterialTheme.typography.titleMedium.copy(
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = MaterialTheme.colorScheme.primary
                     )
                 )
             }

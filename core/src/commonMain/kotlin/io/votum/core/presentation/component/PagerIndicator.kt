@@ -21,7 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import io.votum.core.presentation.theme.VotumTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -47,7 +46,11 @@ fun PagerIndicator(
             )
 
             val color by animateColorAsState(
-                targetValue = if (isSelected) Color(0xFF00BCD4) else Color.LightGray,
+                targetValue = if (isSelected) {
+                    MaterialTheme.colorScheme.primary
+                } else {
+                    MaterialTheme.colorScheme.onSurfaceVariant
+                },
                 label = "indicatorColor"
             )
 
