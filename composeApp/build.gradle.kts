@@ -8,6 +8,7 @@ kotlin {
         commonMain.dependencies {
             implementation(project(":core"))
             implementation(project(":features:onboarding"))
+            implementation(project(":features:registration"))
         }
     }
 }

@@ -37,3 +37,4 @@ dependencyResolutionManagement {
 include(":composeApp")
 include(":core")
 include(":features:onboarding")
+include(":features:registration")
