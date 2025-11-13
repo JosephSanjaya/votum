@@ -7,6 +7,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import io.votum.app.presentation.screen.Splash
 import io.votum.app.presentation.screen.SplashScreen
+import io.votum.auth.presentation.screen.Login
+import io.votum.auth.presentation.screen.LoginScreen
 import io.votum.core.presentation.component.rememberSnackBarHostState
 import io.votum.core.presentation.theme.LocalNavController
 import io.votum.core.presentation.theme.LocalSnackBarHost
@@ -32,6 +34,9 @@ fun VotumNavHost() {
             }
             composable<Registration> {
                 RegistrationScreen()
+            }
+            composable<Login> {
+                LoginScreen()
             }
         }
     }

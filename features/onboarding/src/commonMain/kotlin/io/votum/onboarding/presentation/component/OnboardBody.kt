@@ -45,7 +45,7 @@ fun OnboardBody(
             isShown = shouldShowSignInSheet,
             modifier = Modifier.align(Alignment.BottomStart),
             onSignInClick = {
-                onIntent(OnboardingScreenIntent.OnSignInClicked)
+                onIntent(OnboardingScreenIntent.NavigateToSignIn)
             },
             onSignUpClick = {
                 onIntent(OnboardingScreenIntent.NavigateToSignUp)

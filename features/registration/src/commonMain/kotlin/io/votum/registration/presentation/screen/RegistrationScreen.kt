@@ -58,7 +58,7 @@ fun RegistrationScreen(
     viewModel: RegistrationViewModel = koinViewModel()
 ) {
     val state by viewModel.collectAsState()
-    RegistrationContent(state, modifier)
+    RegistrationContent(state, modifier, onEvent = viewModel::sendIntent)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

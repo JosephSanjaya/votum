@@ -6,27 +6,22 @@ package io.votum.app.presentation.navigation.handler
 
 import androidx.navigation.NavController
 import io.votum.app.presentation.navigation.NavigationEventHandler
-import io.votum.auth.presentation.screen.Login
+import io.votum.auth.presentation.screen.model.LoginScreenIntent
 import io.votum.core.presentation.navigation.NavigationIntent
-import io.votum.onboarding.presentation.screen.model.OnboardingScreenIntent
 import io.votum.registration.presentation.screen.Registration
 import org.koin.core.annotation.Factory
 
 @Factory
-class OnboardingEventHandler : NavigationEventHandler() {
+class AuthEventHandler : NavigationEventHandler() {
 
     override fun canHandle(event: NavigationIntent): Boolean {
-        return event is OnboardingScreenIntent.NavigateToSignUp || event is OnboardingScreenIntent.NavigateToSignIn
+        return event is LoginScreenIntent.NavigateToSignUp
     }
 
     override fun navigate(navController: NavController, event: NavigationIntent) {
         when (event) {
-            OnboardingScreenIntent.NavigateToSignUp -> navController.navigate(
+            LoginScreenIntent.NavigateToSignUp -> navController.navigate(
                 Registration
-            )
-
-            OnboardingScreenIntent.NavigateToSignIn -> navController.navigate(
-                Login
             )
         }
     }
