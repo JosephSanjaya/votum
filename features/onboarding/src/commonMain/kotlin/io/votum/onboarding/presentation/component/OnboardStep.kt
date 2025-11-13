@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.votum.core.presentation.preview.PositionPreviewProvider
 import io.votum.core.presentation.theme.VotumTheme
-import io.votum.onboarding.presentation.screen.OnboardingScreenUiState
+import io.votum.onboarding.presentation.screen.model.OnboardingScreenState
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.painterResource
@@ -81,7 +81,7 @@ private fun OnboardStepPreview(
 ) {
     VotumTheme {
         Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
-            val data = OnboardingScreenUiState.OnboardContent.default()[currentPage]
+            val data = OnboardingScreenState.OnboardContent.default()[currentPage]
             OnboardStep(
                 illustrationRes = data.illustrationRes,
                 titleRes = data.titleRes,

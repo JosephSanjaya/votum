@@ -9,16 +9,16 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 import org.koin.core.annotation.Single
 
-interface NavigationEvent
+interface NavigationIntent
 
 @OptIn(ExperimentalForInheritanceCoroutinesApi::class)
 @Single
 class NavigationEventBus(
-    private val _flow: MutableSharedFlow<NavigationEvent> = MutableSharedFlow(),
+    private val _flow: MutableSharedFlow<NavigationIntent> = MutableSharedFlow(),
     private val dispatcher: CoroutineDispatcher = Dispatchers.Main
-) : SharedFlow<NavigationEvent> by _flow,
+) : SharedFlow<NavigationIntent> by _flow,
     CoroutineScope by CoroutineScope(dispatcher) {
-    fun post(event: NavigationEvent) = launch {
+    fun post(event: NavigationIntent) = launch {
         _flow.emit(event)
     }
 }

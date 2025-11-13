@@ -1,9 +1,9 @@
 package io.votum.app.presentation.navigation
 
 import androidx.navigation.NavController
-import io.votum.core.presentation.navigation.NavigationEvent
+import io.votum.core.presentation.navigation.NavigationIntent
 
 abstract class NavigationEventHandler {
-    abstract fun canHandle(event: NavigationEvent): Boolean
-    abstract fun navigate(navController: NavController, event: NavigationEvent)
+    abstract fun canHandle(event: NavigationIntent): Boolean
+    abstract fun navigate(navController: NavController, event: NavigationIntent)
 }

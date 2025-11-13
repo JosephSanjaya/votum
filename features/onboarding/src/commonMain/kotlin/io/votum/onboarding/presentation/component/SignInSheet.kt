@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -42,9 +43,9 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import votum.features.onboarding.generated.resources.Res
-import votum.features.onboarding.generated.resources.cta_continue_google
+import votum.features.onboarding.generated.resources.cta_sign_in
 import votum.features.onboarding.generated.resources.cta_sign_in_or_sign_up
-import votum.features.onboarding.generated.resources.ic_icons_google
+import votum.features.onboarding.generated.resources.cta_sign_up
 import votum.features.onboarding.generated.resources.subtitle_welcome
 import votum.features.onboarding.generated.resources.title_welcome
 import kotlin.time.Duration.Companion.milliseconds
@@ -56,6 +57,7 @@ fun SignInSheet(
     modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit = {},
     onSignInClick: () -> Unit = {},
+    onSignUpClick: () -> Unit = {},
 ) {
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
@@ -89,6 +91,7 @@ fun SignInSheet(
         ModalBottomSheet(wrappedOnDismissRequest, sheetState = sheetState) {
             SignInSheetContent(
                 onSignInClick = onSignInClick,
+                onSignUpClick = onSignUpClick,
                 onBackClick = wrappedOnDismissRequest
             )
         }
@@ -100,6 +103,7 @@ private fun SignInSheetContent(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit = {},
     onSignInClick: () -> Unit = {},
+    onSignUpClick: () -> Unit = {},
 ) {
     Column(
         modifier = modifier
@@ -152,22 +156,19 @@ private fun SignInSheetContent(
         AgreementText(
             modifier = Modifier.padding(bottom = 16.dp)
         )
-        OutlinedButton(onSignInClick, modifier = Modifier.fillMaxWidth()) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Image(
-                    painterResource(Res.drawable.ic_icons_google),
-                    contentDescription = stringResource(Res.string.cta_continue_google),
-                    modifier = Modifier
-                        .padding(end = 8.dp)
-                        .size(24.dp)
+        Button(onSignInClick, modifier = Modifier.fillMaxWidth()) {
+            Text(
+                stringResource(Res.string.cta_sign_in),
+                style = MaterialTheme.typography.titleMedium
+            )
+        }
+        OutlinedButton(onSignUpClick, modifier = Modifier.fillMaxWidth()) {
+            Text(
+                stringResource(Res.string.cta_sign_up),
+                style = MaterialTheme.typography.titleMedium.copy(
+                    color = MaterialTheme.colorScheme.primary
                 )
-                Text(
-                    stringResource(Res.string.cta_continue_google),
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                )
-            }
+            )
         }
     }
 }

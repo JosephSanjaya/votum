@@ -15,18 +15,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import io.votum.core.presentation.theme.VotumTheme
-import io.votum.onboarding.presentation.screen.OnboardingScreenUiEvent
-import io.votum.onboarding.presentation.screen.OnboardingScreenUiState
+import io.votum.onboarding.presentation.screen.model.OnboardingScreenIntent
+import io.votum.onboarding.presentation.screen.model.OnboardingScreenState
 import kotlinx.collections.immutable.PersistentList
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun OnboardBody(
-    contents: PersistentList<OnboardingScreenUiState.OnboardContent>,
+    contents: PersistentList<OnboardingScreenState.OnboardContent>,
     modifier: Modifier = Modifier,
     shouldShowSignInSheet: Boolean = false,
     pagerState: PagerState = rememberPagerState(0) { contents.size },
-    onEvent: (OnboardingScreenUiEvent) -> Unit = {}
+    onIntent: (OnboardingScreenIntent) -> Unit = {}
 ) {
     Box(
         modifier = modifier.fillMaxSize(),
@@ -45,10 +45,13 @@ fun OnboardBody(
             isShown = shouldShowSignInSheet,
             modifier = Modifier.align(Alignment.BottomStart),
             onSignInClick = {
-                onEvent(OnboardingScreenUiEvent.OnSignInClicked)
+                onIntent(OnboardingScreenIntent.OnSignInClicked)
+            },
+            onSignUpClick = {
+                onIntent(OnboardingScreenIntent.NavigateToSignUp)
             },
             onDismissRequest = {
-                onEvent(OnboardingScreenUiEvent.OnSignInDismissed)
+                onIntent(OnboardingScreenIntent.OnSignInDismissed)
             }
         )
     }
@@ -60,7 +63,7 @@ private fun OnboardBodyPreview() {
     VotumTheme {
         Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
             OnboardBody(
-                OnboardingScreenUiState.OnboardContent.default()
+                OnboardingScreenState.OnboardContent.default()
             )
         }
     }

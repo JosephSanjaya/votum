@@ -8,3 +8,23 @@ inline fun <T> Result<T>.onFailureRethrowCancellation(action: (Throwable) -> Uni
         action(throwable)
     }
 }
+
+inline fun <T> Result<T>.getOrElseRethrowCancellation(onFailure: (Throwable) -> T): T {
+    return fold(
+        onSuccess = { it },
+        onFailure = { throwable ->
+            if (throwable is CancellationException) throw throwable
+            onFailure(throwable)
+        }
+    )
+}
+
+fun <T> Result<T>.getOrNullRethrowCancellation(): T? {
+    return fold(
+        onSuccess = { it },
+        onFailure = { throwable ->
+            if (throwable is CancellationException) throw throwable
+            null
+        }
+    )
+}

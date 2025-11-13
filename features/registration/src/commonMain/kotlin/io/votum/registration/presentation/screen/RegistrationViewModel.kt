@@ -4,61 +4,40 @@
 
 package io.votum.registration.presentation.screen
 
-import io.votum.core.presentation.navigation.NavigationEvent
 import io.votum.core.presentation.utils.BaseViewModel
-import io.votum.registration.domain.model.RegistrationFormData
+import io.votum.core.presentation.utils.VotumDispatchers
 import io.votum.registration.domain.model.RegistrationFormErrors
 import io.votum.registration.domain.model.RegistrationResult
 import io.votum.registration.domain.usecase.RegisterVoterUseCase
 import io.votum.registration.domain.validator.RegistrationValidator
-import org.koin.core.annotation.Factory
+import io.votum.registration.presentation.screen.model.RegistrationScreenIntent
+import io.votum.registration.presentation.screen.model.RegistrationScreenState
+import kotlinx.coroutines.withContext
+import org.koin.android.annotation.KoinViewModel
 
-data class RegistrationState(
-    val formData: RegistrationFormData = RegistrationFormData(),
-    val formErrors: RegistrationFormErrors = RegistrationFormErrors(),
-    val registrationResult: RegistrationResult = RegistrationResult.Idle,
-    val isLoading: Boolean = false
-)
-
-sealed class RegistrationEvent {
-    data class UpdateNationalId(val nationalId: String) : RegistrationEvent()
-    data class UpdateEmail(val email: String) : RegistrationEvent()
-    data class UpdatePassword(val password: String) : RegistrationEvent()
-    data class UpdateConfirmPassword(val confirmPassword: String) : RegistrationEvent()
-    data class UpdateFullName(val fullName: String) : RegistrationEvent()
-    data class UpdateDateOfBirth(val dateOfBirth: String) : RegistrationEvent()
-    data class UpdateAddress(val address: String) : RegistrationEvent()
-    data class UpdatePhoneNumber(val phoneNumber: String) : RegistrationEvent()
-    data class UpdateAcceptedTerms(val accepted: Boolean) : RegistrationEvent()
-    data object ValidateForm : RegistrationEvent()
-    data object SubmitRegistration : RegistrationEvent()
-    data object ClearErrors : RegistrationEvent()
-    data object NavigateToLogin : RegistrationEvent()
-}
-
-@Factory
+@KoinViewModel
 class RegistrationViewModel(
     private val registerVoterUseCase: RegisterVoterUseCase,
-    private val registrationValidator: RegistrationValidator
-) : BaseViewModel<RegistrationState, RegistrationEvent>(
-    initialState = RegistrationState()
+    private val registrationValidator: RegistrationValidator,
+    private val dispatchers: VotumDispatchers
+) : BaseViewModel<RegistrationScreenState, Unit>(
+    initialState = RegistrationScreenState()
 ) {
 
-    override fun onEvent(event: RegistrationEvent) {
-        when (event) {
-            is RegistrationEvent.UpdateNationalId -> updateNationalId(event.nationalId)
-            is RegistrationEvent.UpdateEmail -> updateEmail(event.email)
-            is RegistrationEvent.UpdatePassword -> updatePassword(event.password)
-            is RegistrationEvent.UpdateConfirmPassword -> updateConfirmPassword(event.confirmPassword)
-            is RegistrationEvent.UpdateFullName -> updateFullName(event.fullName)
-            is RegistrationEvent.UpdateDateOfBirth -> updateDateOfBirth(event.dateOfBirth)
-            is RegistrationEvent.UpdateAddress -> updateAddress(event.address)
-            is RegistrationEvent.UpdatePhoneNumber -> updatePhoneNumber(event.phoneNumber)
-            is RegistrationEvent.UpdateAcceptedTerms -> updateAcceptedTerms(event.accepted)
-            is RegistrationEvent.ValidateForm -> validateForm()
-            is RegistrationEvent.SubmitRegistration -> submitRegistration()
-            is RegistrationEvent.ClearErrors -> clearErrors()
-            is RegistrationEvent.NavigateToLogin -> navigateToLogin()
+    override fun onIntent(intent: Any) {
+        when (intent) {
+            is RegistrationScreenIntent.UpdateNationalId -> updateNationalId(intent.nationalId)
+            is RegistrationScreenIntent.UpdateEmail -> updateEmail(intent.email)
+            is RegistrationScreenIntent.UpdatePassword -> updatePassword(intent.password)
+            is RegistrationScreenIntent.UpdateConfirmPassword -> updateConfirmPassword(intent.confirmPassword)
+            is RegistrationScreenIntent.UpdateFullName -> updateFullName(intent.fullName)
+            is RegistrationScreenIntent.UpdateDateOfBirth -> updateDateOfBirth(intent.dateOfBirth)
+            is RegistrationScreenIntent.UpdateAddress -> updateAddress(intent.address)
+            is RegistrationScreenIntent.UpdatePhoneNumber -> updatePhoneNumber(intent.phoneNumber)
+            is RegistrationScreenIntent.UpdateAcceptedTerms -> updateAcceptedTerms(intent.accepted)
+            is RegistrationScreenIntent.ValidateForm -> validateForm()
+            is RegistrationScreenIntent.SubmitRegistration -> submitRegistration()
+            is RegistrationScreenIntent.ClearErrors -> clearErrors()
         }
     }
 
@@ -151,21 +130,28 @@ class RegistrationViewModel(
     }
 
     private fun submitRegistration() = intent {
-        reduce { state.copy(isLoading = true, registrationResult = RegistrationResult.Loading) }
+        reduce { state.copy(isLoading = true) }
 
-        val result = safeIoCall {
-            registerVoterUseCase.execute(state.formData)
+        val result = withContext(dispatchers.io) {
+            registerVoterUseCase.runCatching {
+                execute(state.formData)
+            }.getOrNull()?.takeIf {
+                it is RegistrationResult.Success
+            }
         }
+        sendIntent(
+            if (result == null) {
+                RegistrationScreenIntent.OnRegisterFailed(
+                    "Registration failed. Please try again."
+                )
+            } else {
+                RegistrationScreenIntent.OnRegisterSuccessful
+            }
+        )
 
         reduce {
             state.copy(
-                isLoading = false,
-                registrationResult = result ?: RegistrationResult.Error("Registration failed. Please try again."),
-                formErrors = if (result is RegistrationResult.Error && result.errors != null) {
-                    result.errors
-                } else {
-                    RegistrationFormErrors()
-                }
+                isLoading = false
             )
         }
     }
@@ -173,17 +159,8 @@ class RegistrationViewModel(
     private fun clearErrors() = intent {
         reduce {
             state.copy(
-                formErrors = RegistrationFormErrors(),
-                registrationResult = RegistrationResult.Idle
+                formErrors = RegistrationFormErrors()
             )
         }
     }
-
-    private fun navigateToLogin() = intent {
-        navigationEventBus.post(RegistrationNavigationEvent.NavigateToLogin)
-    }
-}
-
-sealed class RegistrationNavigationEvent {
-    data object NavigateToLogin : RegistrationNavigationEvent(), NavigationEvent
 }

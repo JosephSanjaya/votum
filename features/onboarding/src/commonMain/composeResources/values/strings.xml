@@ -11,6 +11,8 @@
 
     <string name="cta_sign_in_or_sign_up">Sign In or Sign Up</string>
     <string name="cta_continue_google">Continue with Google</string>
+    <string name="cta_sign_in">Sign In</string>
+    <string name="cta_sign_up">Sign Up</string>
 
     <string name="title_welcome">Welcome to Votum</string>
     <string name="subtitle_welcome">A transparent, blockchain-powered voting platform built for trust and civic empowerment.</string>
