@@ -36,5 +36,10 @@ dependencyResolutionManagement {
 
 include(":composeApp")
 include(":core")
+include(":features:auth")
+include(":features:election")
+include(":features:identity")
 include(":features:onboarding")
 include(":features:registration")
+include(":features:result")
+include(":features:vote")

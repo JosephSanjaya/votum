@@ -9,6 +9,11 @@ kotlin {
             implementation(project(":core"))
             implementation(project(":features:onboarding"))
             implementation(project(":features:registration"))
+            implementation(project(":features:auth"))
+            implementation(project(":features:election"))
+            implementation(project(":features:identity"))
+            implementation(project(":features:result"))
+            implementation(project(":features:vote"))
         }
     }
 }
