@@ -112,7 +112,9 @@ private fun ElectionDetailContent(
                             .padding(top = 8.dp)
                     ) {
                         Button(
-                            onClick = { onEvent(ElectionDetailScreenIntent.NavigateToVoting) },
+                            onClick = {
+                                onEvent(ElectionDetailScreenIntent.NavigateToVoting(election.id))
+                            },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(56.dp)

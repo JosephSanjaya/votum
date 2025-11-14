@@ -8,7 +8,5 @@ import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.Module
 
 @Module
-@ComponentScan(
-    "io.votum.vote"
-)
+@ComponentScan("io.votum.vote")
 object VoteModule

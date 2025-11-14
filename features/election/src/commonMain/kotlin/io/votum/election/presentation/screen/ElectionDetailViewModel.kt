@@ -21,7 +21,7 @@ class ElectionDetailViewModel(
         when (intent) {
             is ElectionDetailScreenIntent.LoadElectionDetails -> loadElectionDetails(intent.electionId)
             is ElectionDetailScreenIntent.NavigateBack -> navigateBack()
-            is ElectionDetailScreenIntent.NavigateToVoting -> navigateToVoting()
+            is ElectionDetailScreenIntent.NavigateToVoting -> navigateToVoting(intent.electionId)
         }
     }
 
@@ -51,7 +51,7 @@ class ElectionDetailViewModel(
         sendIntent(ElectionDetailScreenIntent.NavigateBack)
     }
 
-    private fun navigateToVoting() = intent {
-        sendIntent(ElectionDetailScreenIntent.NavigateToVoting)
+    private fun navigateToVoting(electionId: String) = intent {
+        sendIntent(ElectionDetailScreenIntent.NavigateToVoting(electionId))
     }
 }
