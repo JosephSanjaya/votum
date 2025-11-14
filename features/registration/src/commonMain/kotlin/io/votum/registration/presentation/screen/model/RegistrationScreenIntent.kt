@@ -18,6 +18,7 @@ sealed interface RegistrationScreenIntent {
     data object SubmitRegistration : RegistrationScreenIntent
     data object ClearErrors : RegistrationScreenIntent
     data object NavigateToLogin : RegistrationScreenIntent, NavigationIntent
+    data object NavigateToIdentityVerification : RegistrationScreenIntent, NavigationIntent
 
     data object OnRegisterSuccessful :
         RegistrationScreenIntent,

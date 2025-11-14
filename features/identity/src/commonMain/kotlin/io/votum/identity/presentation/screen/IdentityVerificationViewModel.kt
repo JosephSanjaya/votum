@@ -36,24 +36,28 @@ class IdentityVerificationViewModel(
             is IdentityVerificationScreenIntent.CloseCameraCapture -> closeCameraCapture()
             is IdentityVerificationScreenIntent.CameraPhotoTaken -> handleCameraPhoto(intent.photoBase64)
             is IdentityVerificationScreenIntent.SubmitVerification -> submitVerification()
+            is IdentityVerificationScreenIntent.RetryVerification -> retryVerification()
+            is IdentityVerificationScreenIntent.DismissError -> dismissError()
             is IdentityVerificationScreenIntent.NavigateToLogin -> navigateToLogin()
         }
     }
 
     private fun updateNationalId(nationalId: String) = intent {
+        val error = validateNationalIdFormat(nationalId)
         reduce {
             state.copy(
                 nationalId = nationalId,
-                nationalIdError = null
+                nationalIdError = error
             )
         }
     }
 
     private fun updateVerificationCode(code: String) = intent {
+        val error = validateVerificationCodeFormat(code)
         reduce {
             state.copy(
                 verificationCode = code,
-                verificationCodeError = null
+                verificationCodeError = error
             )
         }
     }
@@ -63,12 +67,13 @@ class IdentityVerificationViewModel(
         fileName: String,
         fileSize: Long
     ) = intent {
+        val error = validateDocumentFormat(documentProof, fileName, fileSize)
         reduce {
             state.copy(
                 documentProof = documentProof,
                 documentFileName = fileName,
                 documentFileSize = fileSize,
-                documentError = null
+                documentError = error
             )
         }
     }
@@ -119,22 +124,38 @@ class IdentityVerificationViewModel(
         if (currentState.nationalId.isBlank()) {
             nationalIdError = "National ID is required"
             isValid = false
-        } else if (currentState.nationalId.length < 10) {
-            nationalIdError = "National ID must be at least 10 characters"
-            isValid = false
+        } else {
+            val formatError = validateNationalIdFormat(currentState.nationalId)
+            if (formatError != null) {
+                nationalIdError = formatError
+                isValid = false
+            }
         }
 
         if (currentState.verificationCode.isBlank()) {
             verificationCodeError = "Verification code is required"
             isValid = false
-        } else if (currentState.verificationCode.length < 6) {
-            verificationCodeError = "Verification code must be at least 6 characters"
-            isValid = false
+        } else {
+            val formatError = validateVerificationCodeFormat(currentState.verificationCode)
+            if (formatError != null) {
+                verificationCodeError = formatError
+                isValid = false
+            }
         }
 
         if (currentState.documentProof == null) {
             documentError = "Document proof is required"
             isValid = false
+        } else if (currentState.documentFileName != null) {
+            val formatError = validateDocumentFormat(
+                currentState.documentProof,
+                currentState.documentFileName,
+                currentState.documentFileSize
+            )
+            if (formatError != null) {
+                documentError = formatError
+                isValid = false
+            }
         }
 
         if (!isValid) {
@@ -145,6 +166,12 @@ class IdentityVerificationViewModel(
                     documentError = documentError
                 )
             }
+            sendIntent(
+                DefaultSnackBarVisuals(
+                    message = "Please fix the errors before submitting",
+                    duration = SnackbarDuration.Short
+                )
+            )
             return@intent
         }
 
@@ -161,7 +188,14 @@ class IdentityVerificationViewModel(
         }
 
         result.onSuccess { response ->
-            reduce { state.copy(isLoading = false) }
+            reduce {
+                state.copy(
+                    isLoading = false,
+                    retryCount = 0,
+                    isNetworkError = false,
+                    canRetry = false
+                )
+            }
             if (response.success) {
                 sendIntent(
                     DefaultSnackBarVisuals(
@@ -173,7 +207,8 @@ class IdentityVerificationViewModel(
             } else {
                 reduce {
                     state.copy(
-                        errorMessage = response.message
+                        errorMessage = response.message,
+                        canRetry = true
                     )
                 }
                 sendIntent(
@@ -184,17 +219,49 @@ class IdentityVerificationViewModel(
                 )
             }
         }.onFailure { error ->
+            val isNetworkError = isNetworkException(error)
+            val errorMessage = when {
+                isNetworkError -> "Network error. Please check your connection and try again."
+                error.message?.contains("timeout", ignoreCase = true) == true ->
+                    "Request timed out. Please try again."
+                else -> error.message ?: "Verification failed. Please try again."
+            }
+
             reduce {
                 state.copy(
                     isLoading = false,
-                    errorMessage = error.message ?: "Verification failed"
+                    errorMessage = errorMessage,
+                    isNetworkError = isNetworkError,
+                    canRetry = true,
+                    retryCount = state.retryCount + 1
                 )
             }
             sendIntent(
                 DefaultSnackBarVisuals(
-                    message = error.message ?: "Verification failed. Please try again.",
+                    message = errorMessage,
                     duration = SnackbarDuration.Long
                 )
+            )
+        }
+    }
+
+    private fun retryVerification() = intent {
+        reduce {
+            state.copy(
+                errorMessage = null,
+                isNetworkError = false,
+                canRetry = false
+            )
+        }
+        submitVerification()
+    }
+
+    private fun dismissError() = intent {
+        reduce {
+            state.copy(
+                errorMessage = null,
+                isNetworkError = false,
+                canRetry = false
             )
         }
     }
@@ -207,5 +274,57 @@ class IdentityVerificationViewModel(
         val cleanBase64 = base64.substringAfter("base64,", base64)
         val padding = cleanBase64.count { it == '=' }
         return ((cleanBase64.length * 3L) / 4L) - padding
+    }
+
+    private fun validateNationalIdFormat(nationalId: String): String? {
+        return when {
+            nationalId.isBlank() -> null
+            nationalId.length < 10 -> "National ID must be at least 10 characters"
+            nationalId.length > 20 -> "National ID must not exceed 20 characters"
+            !nationalId.matches(Regex("^[A-Za-z0-9]+$")) -> "National ID must contain only letters and numbers"
+            else -> null
+        }
+    }
+
+    private fun validateVerificationCodeFormat(code: String): String? {
+        return when {
+            code.isBlank() -> null
+            code.length < 6 -> "Verification code must be at least 6 characters"
+            code.length > 20 -> "Verification code must not exceed 20 characters"
+            !code.matches(Regex("^[A-Za-z0-9]+$")) -> "Verification code must be alphanumeric"
+            else -> null
+        }
+    }
+
+    private fun validateDocumentFormat(documentProof: String, fileName: String, fileSize: Long): String? {
+        val maxSize = 5 * 1024 * 1024
+
+        if (fileSize > maxSize) {
+            return "File size must be less than 5MB"
+        }
+
+        val allowedExtensions = listOf("jpg", "jpeg", "png", "pdf")
+        val extension = fileName.substringAfterLast(".", "").lowercase()
+
+        if (extension !in allowedExtensions) {
+            return "Only JPEG, PNG, and PDF files are allowed"
+        }
+
+        if (!documentProof.contains("data:image/") && !documentProof.contains("data:application/pdf")) {
+            return "Invalid document format"
+        }
+
+        return null
+    }
+
+    private fun isNetworkException(error: Throwable): Boolean {
+        val errorMessage = error.message?.lowercase() ?: ""
+        return errorMessage.contains("network") ||
+            errorMessage.contains("connection") ||
+            errorMessage.contains("unreachable") ||
+            errorMessage.contains("no internet") ||
+            error::class.simpleName?.contains("IOException") == true ||
+            error::class.simpleName?.contains("SocketException") == true ||
+            error::class.simpleName?.contains("UnknownHostException") == true
     }
 }

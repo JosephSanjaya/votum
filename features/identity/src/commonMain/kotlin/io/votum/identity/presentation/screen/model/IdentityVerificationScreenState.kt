@@ -14,5 +14,8 @@ data class IdentityVerificationScreenState(
     val nationalIdError: String? = null,
     val verificationCodeError: String? = null,
     val documentError: String? = null,
-    val showCameraCapture: Boolean = false
+    val showCameraCapture: Boolean = false,
+    val retryCount: Int = 0,
+    val isNetworkError: Boolean = false,
+    val canRetry: Boolean = false
 )

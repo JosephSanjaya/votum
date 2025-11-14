@@ -18,5 +18,7 @@ sealed interface IdentityVerificationScreenIntent {
     data object CloseCameraCapture : IdentityVerificationScreenIntent
     data class CameraPhotoTaken(val photoBase64: String) : IdentityVerificationScreenIntent
     data object SubmitVerification : IdentityVerificationScreenIntent
+    data object RetryVerification : IdentityVerificationScreenIntent
+    data object DismissError : IdentityVerificationScreenIntent
     data object NavigateToLogin : IdentityVerificationScreenIntent, NavigationIntent
 }

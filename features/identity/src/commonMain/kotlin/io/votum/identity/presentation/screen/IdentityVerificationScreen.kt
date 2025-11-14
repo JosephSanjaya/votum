@@ -13,8 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
+
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -23,7 +22,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
+
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.Text
@@ -33,11 +32,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.votum.core.presentation.theme.LocalNavController
@@ -46,6 +41,7 @@ import io.votum.core.presentation.theme.VotumTheme
 import io.votum.identity.presentation.component.CameraCapture
 import io.votum.identity.presentation.component.DocumentPreview
 import io.votum.identity.presentation.component.DocumentUploadCard
+import io.votum.identity.presentation.component.NationalIdField
 import io.votum.identity.presentation.component.VerificationCodeField
 import io.votum.identity.presentation.screen.model.IdentityVerificationScreenIntent
 import io.votum.identity.presentation.screen.model.IdentityVerificationScreenState
@@ -57,9 +53,14 @@ import org.orbitmvi.orbit.compose.collectAsState
 @Composable
 fun IdentityVerificationScreen(
     modifier: Modifier = Modifier,
+    nationalId: String? = null,
     viewModel: IdentityVerificationViewModel = koinViewModel()
 ) {
     val state by viewModel.collectAsState()
+
+    if (nationalId != null && state.nationalId.isEmpty()) {
+        viewModel.sendIntent(IdentityVerificationScreenIntent.UpdateNationalId(nationalId))
+    }
 
     IdentityVerificationContent(
         state = state,
@@ -77,7 +78,6 @@ private fun IdentityVerificationContent(
 ) {
     val navController = LocalNavController.current
     val snackbarHostState = LocalSnackBarHost.current
-    val focusManager = LocalFocusManager.current
 
     Scaffold(
         modifier = modifier,
@@ -113,7 +113,11 @@ private fun IdentityVerificationContent(
             ) {
                 Button(
                     onClick = {
-                        onIntent(IdentityVerificationScreenIntent.SubmitVerification)
+                        if (state.canRetry) {
+                            onIntent(IdentityVerificationScreenIntent.RetryVerification)
+                        } else {
+                            onIntent(IdentityVerificationScreenIntent.SubmitVerification)
+                        }
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -121,7 +125,7 @@ private fun IdentityVerificationContent(
                     enabled = !state.isLoading
                 ) {
                     Text(
-                        text = "Verify Identity",
+                        text = if (state.canRetry) "🔄 Retry Verification" else "Verify Identity",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
@@ -161,34 +165,13 @@ private fun IdentityVerificationContent(
                         .padding(bottom = 16.dp)
                 )
 
-                OutlinedTextField(
+                NationalIdField(
                     value = state.nationalId,
                     onValueChange = {
                         onIntent(IdentityVerificationScreenIntent.UpdateNationalId(it))
                     },
-                    label = { Text("National ID") },
-                    placeholder = { Text("Enter your national ID number") },
-                    modifier = Modifier.fillMaxWidth(),
-                    isError = state.nationalIdError != null,
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Number,
-                        imeAction = ImeAction.Next
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onNext = { focusManager.moveFocus(FocusDirection.Down) }
-                    ),
-                    leadingIcon = {
-                        Text(
-                            text = "🆔",
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                    },
-                    supportingText = if (state.nationalIdError != null) {
-                        { Text(state.nationalIdError) }
-                    } else {
-                        null
-                    }
+                    errorMessage = state.nationalIdError,
+                    enabled = !state.isLoading
                 )
 
                 VerificationCodeField(
@@ -218,6 +201,50 @@ private fun IdentityVerificationContent(
                             onIntent(IdentityVerificationScreenIntent.RemoveDocument)
                         }
                     )
+                }
+
+                if (state.errorMessage != null && state.canRetry) {
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.errorContainer
+                        )
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(16.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Text(
+                                text = if (state.isNetworkError) "⚠️ Connection Error" else "❌ Verification Failed",
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onErrorContainer
+                            )
+                            Text(
+                                text = state.errorMessage,
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onErrorContainer
+                            )
+                            if (state.retryCount > 0) {
+                                Text(
+                                    text = "Retry attempt: ${state.retryCount}",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onErrorContainer
+                                )
+                            }
+                            Button(
+                                onClick = {
+                                    onIntent(IdentityVerificationScreenIntent.RetryVerification)
+                                },
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text(
+                                    text = if (state.isNetworkError) "🔄 Retry Connection" else "🔄 Try Again",
+                                    style = MaterialTheme.typography.titleSmall
+                                )
+                            }
+                        }
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -265,7 +292,9 @@ private fun IdentityVerificationContent(
 }
 
 @Serializable
-object IdentityVerification
+data class IdentityVerification(
+    val nationalId: String? = null
+)
 
 @Preview
 @Composable

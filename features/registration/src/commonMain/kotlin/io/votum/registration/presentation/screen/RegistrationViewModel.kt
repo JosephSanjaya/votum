@@ -139,15 +139,17 @@ class RegistrationViewModel(
                 it is RegistrationResult.Success
             }
         }
-        sendIntent(
-            if (result == null) {
+
+        if (result == null) {
+            sendIntent(
                 RegistrationScreenIntent.OnRegisterFailed(
                     "Registration failed. Please try again."
                 )
-            } else {
-                RegistrationScreenIntent.OnRegisterSuccessful
-            }
-        )
+            )
+        } else {
+            sendIntent(RegistrationScreenIntent.OnRegisterSuccessful)
+            sendIntent(RegistrationScreenIntent.NavigateToIdentityVerification)
+        }
 
         reduce {
             state.copy(
