@@ -23,6 +23,10 @@ import io.votum.vote.presentation.screen.Voting
 import io.votum.vote.presentation.screen.VotingScreen
 import io.votum.vote.presentation.screen.VoteReceipt
 import io.votum.vote.presentation.screen.VoteReceiptScreen
+import io.votum.result.presentation.screen.Result
+import io.votum.result.presentation.screen.ResultScreen
+import io.votum.result.presentation.screen.LiveResult
+import io.votum.result.presentation.screen.LiveResultScreen
 
 @Composable
 fun VotumNavHost() {
@@ -56,6 +60,14 @@ fun VotumNavHost() {
             composable<VoteReceipt> { backStackEntry ->
                 val voteReceipt = backStackEntry.toRoute<VoteReceipt>()
                 VoteReceiptScreen()
+            }
+            composable<Result> { backStackEntry ->
+                val result = backStackEntry.toRoute<Result>()
+                ResultScreen(electionId = result.electionId)
+            }
+            composable<LiveResult> { backStackEntry ->
+                val liveResult = backStackEntry.toRoute<LiveResult>()
+                LiveResultScreen(electionId = liveResult.electionId)
             }
         }
     }
