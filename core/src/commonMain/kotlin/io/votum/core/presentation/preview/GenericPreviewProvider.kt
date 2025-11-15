@@ -1,11 +1,14 @@
+@file:Suppress("Deprecation")
+
 package io.votum.core.presentation.preview
+
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameterProvider
 
 /**
  * A versatile PreviewParameterProvider that can feed any sequence of values.
  *
  * Example usage:
- *   @Preview
+ *   @VotumPreview
  *   @Composable
  *   fun MyPreview(
  *       @PreviewParameter(GenericPreviewProvider::class) isActive: Boolean
@@ -14,7 +17,7 @@ import org.jetbrains.compose.ui.tooling.preview.PreviewParameterProvider
  *   }
  */
 open class GenericPreviewProvider<T>(
-    private val items: Sequence<T>
+    items: Sequence<T>
 ) : PreviewParameterProvider<T> {
     override val values: Sequence<T> = items
 }

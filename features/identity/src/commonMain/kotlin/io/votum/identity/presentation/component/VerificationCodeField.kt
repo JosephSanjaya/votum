@@ -18,7 +18,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import io.votum.core.presentation.theme.VotumTheme
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import io.votum.core.presentation.preview.VotumPreview
 
 @Composable
 fun VerificationCodeField(
@@ -71,7 +71,7 @@ fun VerificationCodeField(
     }
 }
 
-@Preview
+@VotumPreview
 @Composable
 private fun VerificationCodeFieldPreview() {
     VotumTheme {

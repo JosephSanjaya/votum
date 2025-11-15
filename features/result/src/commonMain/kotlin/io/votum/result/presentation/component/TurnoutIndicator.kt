@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import io.votum.core.presentation.theme.VotumTheme
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import io.votum.core.presentation.preview.VotumPreview
 
 @Composable
 fun TurnoutIndicator(
@@ -62,7 +62,7 @@ private fun Double.formatPercentage(): String {
     return rounded.toString()
 }
 
-@Preview
+@VotumPreview
 @Composable
 private fun TurnoutIndicatorHighPreview() {
     VotumTheme {
@@ -70,7 +70,7 @@ private fun TurnoutIndicatorHighPreview() {
     }
 }
 
-@Preview
+@VotumPreview
 @Composable
 private fun TurnoutIndicatorMediumPreview() {
     VotumTheme {
@@ -78,7 +78,7 @@ private fun TurnoutIndicatorMediumPreview() {
     }
 }
 
-@Preview
+@VotumPreview
 @Composable
 private fun TurnoutIndicatorLowPreview() {
     VotumTheme {

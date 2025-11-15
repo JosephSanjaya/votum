@@ -18,7 +18,7 @@ import io.votum.core.presentation.theme.VotumTheme
 import io.votum.onboarding.presentation.screen.model.OnboardingScreenIntent
 import io.votum.onboarding.presentation.screen.model.OnboardingScreenState
 import kotlinx.collections.immutable.PersistentList
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import io.votum.core.presentation.preview.VotumPreview
 
 @Composable
 fun OnboardBody(
@@ -58,7 +58,7 @@ fun OnboardBody(
 }
 
 @Composable
-@Preview
+@VotumPreview
 private fun OnboardBodyPreview() {
     VotumTheme {
         Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {

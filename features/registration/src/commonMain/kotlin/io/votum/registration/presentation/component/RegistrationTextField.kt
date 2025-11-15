@@ -27,7 +27,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import io.votum.core.presentation.theme.VotumTheme
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import io.votum.core.presentation.preview.VotumPreview
 
 @Composable
 fun RegistrationTextField(
@@ -98,7 +98,7 @@ fun RegistrationTextField(
     }
 }
 
-@Preview
+@VotumPreview
 @Composable
 private fun RegistrationTextFieldPreview() {
     VotumTheme {

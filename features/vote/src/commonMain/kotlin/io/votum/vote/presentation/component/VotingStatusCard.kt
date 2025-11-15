@@ -24,7 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import io.votum.core.presentation.theme.VotumTheme
 import io.votum.vote.domain.model.VotingStatus
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import io.votum.core.presentation.preview.VotumPreview
 
 @Composable
 fun VotingStatusCard(
@@ -127,7 +127,7 @@ private fun formatRemainingTime(milliseconds: Long): String {
     }
 }
 
-@Preview
+@VotumPreview
 @Composable
 private fun VotingStatusCardActivePreview() {
     VotumTheme {
@@ -145,7 +145,7 @@ private fun VotingStatusCardActivePreview() {
     }
 }
 
-@Preview
+@VotumPreview
 @Composable
 private fun VotingStatusCardClosedPreview() {
     VotumTheme {

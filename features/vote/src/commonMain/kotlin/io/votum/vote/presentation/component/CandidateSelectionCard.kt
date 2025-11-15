@@ -29,7 +29,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.votum.core.presentation.theme.VotumTheme
 import io.votum.election.domain.model.Candidate
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import io.votum.core.presentation.preview.VotumPreview
 
 @Composable
 fun CandidateSelectionCard(
@@ -115,7 +115,7 @@ fun CandidateSelectionCard(
     }
 }
 
-@Preview
+@VotumPreview
 @Composable
 private fun CandidateSelectionCardPreview() {
     VotumTheme {

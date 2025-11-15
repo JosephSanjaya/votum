@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import io.votum.core.presentation.theme.VotumTheme
 import io.votum.election.domain.model.Candidate
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import io.votum.core.presentation.preview.VotumPreview
 
 @Composable
 fun VoteConfirmationDialog(
@@ -158,7 +158,7 @@ fun VoteConfirmationDialog(
     }
 }
 
-@Preview
+@VotumPreview
 @Composable
 private fun VoteConfirmationDialogPreview() {
     VotumTheme {
@@ -180,7 +180,7 @@ private fun VoteConfirmationDialogPreview() {
     }
 }
 
-@Preview
+@VotumPreview
 @Composable
 private fun VoteConfirmationDialogSubmittingPreview() {
     VotumTheme {

@@ -46,7 +46,7 @@ import io.votum.identity.presentation.component.VerificationCodeField
 import io.votum.identity.presentation.screen.model.IdentityVerificationScreenIntent
 import io.votum.identity.presentation.screen.model.IdentityVerificationScreenState
 import kotlinx.serialization.Serializable
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import io.votum.core.presentation.preview.VotumPreview
 import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
@@ -296,7 +296,7 @@ data class IdentityVerification(
     val nationalId: String? = null
 )
 
-@Preview
+@VotumPreview
 @Composable
 private fun IdentityVerificationScreenPreview() {
     VotumTheme {
@@ -310,7 +310,7 @@ private fun IdentityVerificationScreenPreview() {
     }
 }
 
-@Preview
+@VotumPreview
 @Composable
 private fun IdentityVerificationScreenWithDocumentPreview() {
     VotumTheme {
@@ -327,7 +327,7 @@ private fun IdentityVerificationScreenWithDocumentPreview() {
     }
 }
 
-@Preview
+@VotumPreview
 @Composable
 private fun IdentityVerificationScreenLoadingPreview() {
     VotumTheme {

@@ -10,6 +10,8 @@ import kotlinx.coroutines.withContext
 import org.koin.core.annotation.Single
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 @Single
 class CryptoServiceImpl(
@@ -78,8 +80,9 @@ class CryptoServiceImpl(
         }
     }
 
+    @OptIn(ExperimentalTime::class)
     private fun buildVoteMessage(electionId: String, candidateId: String): String {
-        val timestamp = kotlinx.datetime.Clock.System.now().toEpochMilliseconds()
+        val timestamp = Clock.System.now().toEpochMilliseconds()
         return "VOTE:$electionId:$candidateId:$timestamp"
     }
 
@@ -103,8 +106,9 @@ class CryptoServiceImpl(
         }
     }
 
+    @OptIn(ExperimentalTime::class)
     private fun simulateSR25519KeyPairGeneration(): Pair<ByteArray, ByteArray> {
-        val seed = kotlinx.datetime.Clock.System.now().toEpochMilliseconds()
+        val seed = Clock.System.now().toEpochMilliseconds()
 
         val privateKey = ByteArray(32) { index ->
             ((seed shr (index % 8)) xor (index * 17L)).toByte()

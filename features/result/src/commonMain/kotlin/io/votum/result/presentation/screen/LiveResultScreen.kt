@@ -44,7 +44,7 @@ import io.votum.result.presentation.screen.model.LiveResultScreenIntent
 import io.votum.result.presentation.screen.model.LiveResultScreenState
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.Serializable
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import io.votum.core.presentation.preview.VotumPreview
 import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
@@ -239,7 +239,7 @@ private fun LiveResultScreenContent(
 @Serializable
 data class LiveResult(val electionId: String)
 
-@Preview
+@VotumPreview
 @Composable
 private fun LiveResultScreenPreview() {
     VotumTheme {

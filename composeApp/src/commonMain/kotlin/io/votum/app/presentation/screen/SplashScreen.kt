@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import io.votum.core.presentation.theme.VotumTheme
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import io.votum.core.presentation.preview.VotumPreview
 import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 import votum.composeapp.generated.resources.Res
@@ -70,7 +70,7 @@ private fun SplashScreenContent(
 object Splash
 
 @Composable
-@Preview
+@VotumPreview
 private fun SplashScreenPreview() {
     VotumTheme {
         SplashScreenContent(

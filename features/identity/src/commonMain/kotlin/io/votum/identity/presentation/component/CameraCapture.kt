@@ -23,7 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.votum.core.presentation.theme.VotumTheme
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import io.votum.core.presentation.preview.VotumPreview
 
 @Composable
 fun CameraCapture(
@@ -92,7 +92,7 @@ fun CameraCapture(
     }
 }
 
-@Preview
+@VotumPreview
 @Composable
 private fun CameraCapturePreview() {
     VotumTheme {

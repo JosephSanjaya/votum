@@ -23,7 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import io.votum.core.presentation.theme.VotumTheme
 import io.votum.result.domain.model.CandidateResult
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import io.votum.core.presentation.preview.VotumPreview
 
 @Composable
 fun CandidateResultCard(
@@ -107,7 +107,7 @@ private fun Double.formatPercentage(): String {
     return rounded.toString()
 }
 
-@Preview
+@VotumPreview
 @Composable
 private fun CandidateResultCardWinnerPreview() {
     VotumTheme {
@@ -124,7 +124,7 @@ private fun CandidateResultCardWinnerPreview() {
     }
 }
 
-@Preview
+@VotumPreview
 @Composable
 private fun CandidateResultCardPreview() {
     VotumTheme {

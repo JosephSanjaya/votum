@@ -16,11 +16,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.votum.core.presentation.preview.BooleanPreviewProvider
+import io.votum.core.presentation.preview.VotumPreview
 import io.votum.core.presentation.theme.VotumTheme
 import io.votum.core.presentation.utils.CoreResources
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
-import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 import votum.features.onboarding.generated.resources.Res
 import votum.features.onboarding.generated.resources.cta_sign_in_or_sign_up
 
@@ -53,9 +52,12 @@ fun OnboardFooter(
 }
 
 @Composable
-@Preview
+@VotumPreview
 private fun OnboardFooterPreview(
-    @PreviewParameter(BooleanPreviewProvider::class) isLastStep: Boolean
+    @Suppress("Deprecation")
+    @org.jetbrains.compose.ui.tooling.preview.PreviewParameter(
+        BooleanPreviewProvider::class
+    ) isLastStep: Boolean
 ) {
     VotumTheme {
         Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {

@@ -15,9 +15,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.votum.election.domain.model.ElectionStatus
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
+import kotlin.time.Clock
+import kotlin.time.Duration
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
+@OptIn(ExperimentalTime::class)
 @Composable
 fun ElectionTimeInfo(
     startTime: Instant,
@@ -77,7 +80,7 @@ fun ElectionTimeInfo(
     }
 }
 
-private fun kotlin.time.Duration.formatDuration(): String {
+private fun Duration.formatDuration(): String {
     val totalDays = inWholeDays
     val totalHours = inWholeHours
     val totalMinutes = inWholeMinutes

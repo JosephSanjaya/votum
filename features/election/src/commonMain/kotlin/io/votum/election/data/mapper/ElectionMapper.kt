@@ -20,8 +20,10 @@ import io.votum.election.domain.model.ElectionType
 import io.votum.election.domain.model.EligibilityCriteria
 import io.votum.election.domain.model.PaginatedElections
 import io.votum.election.domain.model.Pagination
-import kotlinx.datetime.Instant
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
+@OptIn(ExperimentalTime::class)
 fun ElectionDto.toDomain(): Election {
     return Election(
         id = id,
@@ -46,6 +48,7 @@ fun ElectionDto.toDomain(): Election {
     )
 }
 
+@OptIn(ExperimentalTime::class)
 fun ElectionDetailDto.toDomain(): ElectionDetail {
     return ElectionDetail(
         id = id,

@@ -48,7 +48,7 @@ import io.votum.registration.presentation.component.RegistrationTextField
 import io.votum.registration.presentation.screen.model.RegistrationScreenIntent
 import io.votum.registration.presentation.screen.model.RegistrationScreenState
 import kotlinx.serialization.Serializable
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import io.votum.core.presentation.preview.VotumPreview
 import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
@@ -350,7 +350,7 @@ private fun RegistrationContent(
 @Serializable
 object Registration
 
-@Preview
+@VotumPreview
 @Composable
 private fun RegistrationScreenPreview() {
     VotumTheme {

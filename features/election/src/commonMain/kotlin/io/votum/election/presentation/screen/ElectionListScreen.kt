@@ -38,7 +38,7 @@ import io.votum.election.presentation.component.ElectionCard
 import io.votum.election.presentation.screen.model.ElectionListScreenIntent
 import io.votum.election.presentation.screen.model.ElectionListScreenState
 import kotlinx.serialization.Serializable
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import io.votum.core.presentation.preview.VotumPreview
 import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
@@ -228,7 +228,7 @@ private fun ElectionListContent(
 @Serializable
 object ElectionList
 
-@Preview
+@VotumPreview
 @Composable
 private fun ElectionListScreenPreview() {
     VotumTheme {

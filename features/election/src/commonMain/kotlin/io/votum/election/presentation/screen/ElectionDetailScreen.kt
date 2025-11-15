@@ -45,9 +45,10 @@ import io.votum.election.presentation.component.ElectionTimeInfo
 import io.votum.election.presentation.screen.model.ElectionDetailScreenIntent
 import io.votum.election.presentation.screen.model.ElectionDetailScreenState
 import kotlinx.serialization.Serializable
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import io.votum.core.presentation.preview.VotumPreview
 import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
+import kotlin.time.ExperimentalTime
 
 @Composable
 fun ElectionDetailScreen(
@@ -251,6 +252,7 @@ private fun ElectionDetailContent(
 
                                 Spacer(modifier = Modifier.height(12.dp))
 
+                                @OptIn(ExperimentalTime::class)
                                 ElectionTimeInfo(
                                     startTime = election.startTime,
                                     endTime = election.endTime,
@@ -396,7 +398,7 @@ private fun ElectionDetailContent(
 @Serializable
 data class ElectionDetail(val electionId: String)
 
-@Preview
+@VotumPreview
 @Composable
 private fun ElectionDetailScreenPreview() {
     VotumTheme {

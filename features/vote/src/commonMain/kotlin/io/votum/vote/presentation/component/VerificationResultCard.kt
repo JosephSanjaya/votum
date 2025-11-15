@@ -24,7 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import io.votum.core.presentation.theme.VotumTheme
 import io.votum.vote.domain.model.VoteVerification
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import io.votum.core.presentation.preview.VotumPreview
 
 @Composable
 fun VerificationResultCard(
@@ -139,7 +139,7 @@ private fun VerificationDetailRow(
     }
 }
 
-@Preview
+@VotumPreview
 @Composable
 private fun VerificationResultCardValidPreview() {
     VotumTheme {
@@ -158,7 +158,7 @@ private fun VerificationResultCardValidPreview() {
     }
 }
 
-@Preview
+@VotumPreview
 @Composable
 private fun VerificationResultCardInvalidPreview() {
     VotumTheme {

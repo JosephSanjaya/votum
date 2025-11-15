@@ -26,7 +26,7 @@ import io.votum.core.presentation.theme.VotumTheme
 import io.votum.core.presentation.utils.CoreResources
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import io.votum.core.presentation.preview.VotumPreview
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 
 @Composable
@@ -66,8 +66,9 @@ fun OnboardHeader(
 }
 
 @Composable
-@Preview
+@VotumPreview
 private fun OnboardHeaderPreview(
+    @Suppress("Deprecation")
     @PreviewParameter(PositionPreviewProvider::class) currentPage: Int
 ) {
     VotumTheme {

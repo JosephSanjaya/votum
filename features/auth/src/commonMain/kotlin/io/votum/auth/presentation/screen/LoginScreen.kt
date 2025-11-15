@@ -39,7 +39,7 @@ import io.votum.core.presentation.theme.LocalNavController
 import io.votum.core.presentation.theme.LocalSnackBarHost
 import io.votum.core.presentation.theme.VotumTheme
 import kotlinx.serialization.Serializable
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import io.votum.core.presentation.preview.VotumPreview
 import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
@@ -201,7 +201,7 @@ private fun LoginContent(
 @Serializable
 object Login
 
-@Preview
+@VotumPreview
 @Composable
 private fun LoginScreenPreview() {
     VotumTheme {

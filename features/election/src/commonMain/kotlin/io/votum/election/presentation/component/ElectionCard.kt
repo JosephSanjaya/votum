@@ -24,6 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.votum.election.domain.model.Election
+import kotlin.time.ExperimentalTime
 
 @Composable
 fun ElectionCard(
@@ -71,6 +72,7 @@ fun ElectionCard(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
+                @OptIn(ExperimentalTime::class)
                 ElectionTimeInfo(
                     startTime = election.startTime,
                     endTime = election.endTime,

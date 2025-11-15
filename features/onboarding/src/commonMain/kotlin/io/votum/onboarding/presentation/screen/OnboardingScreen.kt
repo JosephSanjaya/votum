@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import io.votum.core.presentation.preview.PositionPreviewProvider
+import io.votum.core.presentation.preview.VotumPreview
 import io.votum.core.presentation.theme.LocalSnackBarHost
 import io.votum.core.presentation.theme.VotumTheme
 import io.votum.onboarding.presentation.component.OnboardBody
@@ -26,8 +27,6 @@ import io.votum.onboarding.presentation.screen.model.OnboardingScreenIntent
 import io.votum.onboarding.presentation.screen.model.OnboardingScreenState
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
-import org.jetbrains.compose.ui.tooling.preview.Preview
-import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
@@ -104,9 +103,12 @@ private fun OnboardingScreenContent(
 object Onboarding
 
 @Composable
-@Preview(showBackground = true)
+@VotumPreview
 private fun OnboardingScreenPreview(
-    @PreviewParameter(PositionPreviewProvider::class) currentPage: Int
+    @Suppress("Deprecation")
+    @org.jetbrains.compose.ui.tooling.preview.PreviewParameter(
+        PositionPreviewProvider::class
+    ) currentPage: Int
 ) {
     VotumTheme {
         val uiState =

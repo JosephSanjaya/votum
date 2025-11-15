@@ -17,8 +17,8 @@ import org.koin.core.annotation.Factory
 class ResultEventHandler : NavigationEventHandler() {
 
     override fun canHandle(event: NavigationIntent): Boolean {
-        return event is ResultScreenIntent.NavigateBack ||
-            event is LiveResultScreenIntent.NavigateBack
+        return event == ResultScreenIntent.NavigateBack ||
+            event == LiveResultScreenIntent.NavigateBack
     }
 
     override fun navigate(navController: NavController, event: NavigationIntent) {

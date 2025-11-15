@@ -21,7 +21,7 @@ import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import io.votum.core.presentation.theme.VotumTheme
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import io.votum.core.presentation.preview.VotumPreview
 
 @Composable
 fun AgreementText(
@@ -71,7 +71,7 @@ fun AgreementText(
 }
 
 @Composable
-@Preview
+@VotumPreview
 private fun AgreementTextPreview() {
     VotumTheme {
         Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {

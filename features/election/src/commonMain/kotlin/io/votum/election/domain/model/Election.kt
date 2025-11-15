@@ -4,8 +4,10 @@
 
 package io.votum.election.domain.model
 
-import kotlinx.datetime.Instant
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
+@OptIn(ExperimentalTime::class)
 data class Election(
     val id: String,
     val title: String,
@@ -20,6 +22,7 @@ data class Election(
     val candidateCount: Int
 )
 
+@OptIn(ExperimentalTime::class)
 data class ElectionDetail(
     val id: String,
     val title: String,

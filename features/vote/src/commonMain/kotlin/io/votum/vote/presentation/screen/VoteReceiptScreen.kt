@@ -35,7 +35,7 @@ import io.votum.vote.presentation.component.VoteReceiptCard
 import io.votum.vote.presentation.screen.model.VoteReceiptScreenIntent
 import io.votum.vote.presentation.screen.model.VoteReceiptScreenState
 import kotlinx.serialization.Serializable
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import io.votum.core.presentation.preview.VotumPreview
 import org.koin.compose.viewmodel.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 
@@ -201,7 +201,7 @@ data class VoteReceipt(
     val candidateName: String
 )
 
-@Preview
+@VotumPreview
 @Composable
 private fun VoteReceiptScreenPreview() {
     VotumTheme {

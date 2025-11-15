@@ -30,8 +30,7 @@ import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
-import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
+import io.votum.core.presentation.preview.VotumPreview
 
 @Composable
 fun OnboardStep(
@@ -75,9 +74,12 @@ fun OnboardStep(
 }
 
 @Composable
-@Preview(showBackground = true)
+@VotumPreview
 private fun OnboardStepPreview(
-    @PreviewParameter(PositionPreviewProvider::class) currentPage: Int
+    @Suppress("Deprecation")
+    @org.jetbrains.compose.ui.tooling.preview.PreviewParameter(
+        PositionPreviewProvider::class
+    ) currentPage: Int
 ) {
     VotumTheme {
         Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {

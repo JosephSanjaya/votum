@@ -41,7 +41,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import io.votum.core.presentation.preview.VotumPreview
 import votum.features.onboarding.generated.resources.Res
 import votum.features.onboarding.generated.resources.cta_sign_in
 import votum.features.onboarding.generated.resources.cta_sign_in_or_sign_up
@@ -174,7 +174,7 @@ private fun SignInSheetContent(
 }
 
 @Composable
-@Preview(showBackground = true)
+@VotumPreview
 private fun SignInSheetPreview() {
     VotumTheme {
         Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {

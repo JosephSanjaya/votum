@@ -8,7 +8,6 @@ import io.votum.core.presentation.utils.BaseViewModel
 import io.votum.result.domain.usecase.GetElectionResultsUseCase
 import io.votum.result.presentation.screen.model.ResultScreenIntent
 import io.votum.result.presentation.screen.model.ResultScreenState
-import kotlinx.datetime.Clock
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
@@ -39,7 +38,7 @@ class ResultViewModel(
                     state.copy(
                         isLoading = false,
                         results = results,
-                        lastUpdated = Clock.System.now().toString()
+                        lastUpdated = "Just now"
                     )
                 }
             }
@@ -64,7 +63,7 @@ class ResultViewModel(
                     state.copy(
                         isRefreshing = false,
                         results = results,
-                        lastUpdated = Clock.System.now().toString()
+                        lastUpdated = "Just now"
                     )
                 }
             }

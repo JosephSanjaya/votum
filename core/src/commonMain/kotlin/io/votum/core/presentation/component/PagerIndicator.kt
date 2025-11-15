@@ -23,7 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import io.votum.core.presentation.theme.VotumTheme
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import io.votum.core.presentation.preview.VotumPreview
 
 @Composable
 @OptIn(ExperimentalComposeUiApi::class)
@@ -67,7 +67,7 @@ fun PagerIndicator(
 }
 
 @Composable
-@Preview
+@VotumPreview
 private fun PagerIndicatorPreview() {
     VotumTheme {
         Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {

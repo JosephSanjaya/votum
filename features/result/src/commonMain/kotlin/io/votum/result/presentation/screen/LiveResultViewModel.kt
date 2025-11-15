@@ -13,7 +13,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
@@ -49,7 +48,7 @@ class LiveResultViewModel(
                     state.copy(
                         isLoading = false,
                         liveResults = liveResults,
-                        lastRefreshTime = Clock.System.now().toString()
+                        lastRefreshTime = "Just now"
                     )
                 }
 
@@ -93,7 +92,7 @@ class LiveResultViewModel(
                     state.copy(
                         isLoading = false,
                         liveResults = liveResults,
-                        lastRefreshTime = Clock.System.now().toString()
+                        lastRefreshTime = "Just now"
                     )
                 }
             }

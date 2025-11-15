@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import io.votum.core.presentation.theme.VotumTheme
 import io.votum.result.domain.model.ElectionResults
 import kotlinx.collections.immutable.persistentListOf
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import io.votum.core.presentation.preview.VotumPreview
 
 @Composable
 fun ResultCard(
@@ -146,7 +146,7 @@ private fun Double.formatPercentage(): String {
     return rounded.toString()
 }
 
-@Preview
+@VotumPreview
 @Composable
 private fun ResultCardPreview() {
     VotumTheme {
