@@ -13,7 +13,6 @@ import io.votum.vote.domain.model.VoteReceipt
 import io.votum.vote.domain.model.VoteVerification
 import io.votum.vote.domain.model.VotingStatus
 import io.votum.vote.domain.repository.VoteRepository
-import kotlinx.serialization.json.Json
 import org.koin.core.annotation.Single
 
 @Single
@@ -22,7 +21,6 @@ class VoteRepositoryImpl(
 ) : VoteRepository {
 
     private val api: VoteApi = ktorfit.createVoteApi()
-    private val json = Json { prettyPrint = true }
     private val localReceipts = mutableListOf<VoteReceipt>()
 
     override suspend fun checkVotingEligibility(

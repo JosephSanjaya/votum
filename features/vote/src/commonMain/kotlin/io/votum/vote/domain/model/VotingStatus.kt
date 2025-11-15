@@ -10,5 +10,6 @@ data class VotingStatus(
     val totalVotesCast: Int,
     val voterHasVoted: Boolean,
     val remainingTime: Long,
-    val votingProgress: Double
+    val votingProgress: Double,
+    val candidates: List<Candidate> = emptyList()
 )

@@ -31,7 +31,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import io.votum.core.presentation.theme.VotumTheme
-import io.votum.election.domain.model.Candidate
+import io.votum.vote.domain.model.Candidate
 import io.votum.core.presentation.preview.VotumPreview
 
 @Composable

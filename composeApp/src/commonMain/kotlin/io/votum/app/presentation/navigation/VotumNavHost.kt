@@ -13,6 +13,10 @@ import io.votum.auth.presentation.screen.LoginScreen
 import io.votum.core.presentation.component.rememberSnackBarHostState
 import io.votum.core.presentation.theme.LocalNavController
 import io.votum.core.presentation.theme.LocalSnackBarHost
+import io.votum.election.presentation.screen.ElectionDetail
+import io.votum.election.presentation.screen.ElectionDetailScreen
+import io.votum.election.presentation.screen.ElectionList
+import io.votum.election.presentation.screen.ElectionListScreen
 import io.votum.identity.presentation.screen.IdentityVerification
 import io.votum.identity.presentation.screen.IdentityVerificationScreen
 import io.votum.onboarding.presentation.screen.Onboarding
@@ -50,15 +54,20 @@ fun VotumNavHost() {
                 val identityVerification = backStackEntry.toRoute<IdentityVerification>()
                 IdentityVerificationScreen(nationalId = identityVerification.nationalId)
             }
+            composable<ElectionList> {
+                ElectionListScreen()
+            }
+            composable<ElectionDetail> { backStackEntry ->
+                val detail = backStackEntry.toRoute<ElectionDetail>()
+                ElectionDetailScreen(detail.electionId)
+            }
             composable<Login> {
                 LoginScreen()
             }
-            composable<Voting> { backStackEntry ->
-                val voting = backStackEntry.toRoute<Voting>()
+            composable<Voting> {
                 VotingScreen()
             }
-            composable<VoteReceipt> { backStackEntry ->
-                val voteReceipt = backStackEntry.toRoute<VoteReceipt>()
+            composable<VoteReceipt> {
                 VoteReceiptScreen()
             }
             composable<Result> { backStackEntry ->

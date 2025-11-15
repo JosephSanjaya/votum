@@ -54,6 +54,7 @@ class VotingViewModel(
                     reduce {
                         state.copy(
                             votingStatus = votingStatus,
+                            candidates = votingStatus.candidates,
                             isLoadingStatus = false
                         )
                     }

@@ -4,7 +4,7 @@
 
 package io.votum.vote.presentation.screen.model
 
-import io.votum.election.domain.model.Candidate
+import io.votum.vote.domain.model.Candidate
 import io.votum.vote.domain.model.VoteReceipt
 import io.votum.vote.domain.model.VotingStatus
 

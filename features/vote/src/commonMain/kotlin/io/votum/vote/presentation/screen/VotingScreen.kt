@@ -30,7 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import io.votum.core.presentation.theme.VotumTheme
-import io.votum.election.domain.model.Candidate
+import io.votum.vote.domain.model.Candidate
 import io.votum.vote.presentation.component.CandidateSelectionCard
 import io.votum.vote.presentation.component.VoteConfirmationDialog
 import io.votum.vote.presentation.component.VotingStatusCard
