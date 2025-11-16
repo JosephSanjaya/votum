@@ -38,7 +38,6 @@ class IdentityVerificationViewModel(
             is IdentityVerificationScreenIntent.SubmitVerification -> submitVerification()
             is IdentityVerificationScreenIntent.RetryVerification -> retryVerification()
             is IdentityVerificationScreenIntent.DismissError -> dismissError()
-            is IdentityVerificationScreenIntent.NavigateToLogin -> navigateToLogin()
         }
     }
 
@@ -203,7 +202,7 @@ class IdentityVerificationViewModel(
                         duration = SnackbarDuration.Short
                     )
                 )
-                sendIntent(IdentityVerificationScreenIntent.NavigateToLogin)
+                navigateToLogin()
             } else {
                 reduce {
                     state.copy(

@@ -33,7 +33,6 @@ class ElectionListViewModel(
             is ElectionListScreenIntent.RefreshElections -> refreshElections()
             is ElectionListScreenIntent.SearchElections -> searchElections(intent.query)
             is ElectionListScreenIntent.FilterByStatus -> filterByStatus(intent.status)
-            is ElectionListScreenIntent.NavigateToElectionDetail -> navigateToDetail(intent.electionId)
         }
     }
 
@@ -133,9 +132,5 @@ class ElectionListViewModel(
                 }
             )
         }
-    }
-
-    private fun navigateToDetail(electionId: String) = intent {
-        sendIntent(ElectionListScreenIntent.NavigateToElectionDetail(electionId))
     }
 }

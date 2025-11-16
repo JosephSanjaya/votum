@@ -10,13 +10,19 @@ import io.votum.vote.domain.usecase.VerifyVoteUseCase
 import io.votum.vote.presentation.screen.model.VoteReceiptScreenIntent
 import io.votum.vote.presentation.screen.model.VoteReceiptScreenState
 import org.koin.android.annotation.KoinViewModel
+import org.koin.core.annotation.InjectedParam
 
 @KoinViewModel
 class VoteReceiptViewModel(
+    @InjectedParam private val voteId: String,
+    @InjectedParam private val voterId: String,
     private val getVoteReceiptUseCase: GetVoteReceiptUseCase,
     private val verifyVoteUseCase: VerifyVoteUseCase
 ) : BaseViewModel<VoteReceiptScreenState, Unit>(
-    initialState = VoteReceiptScreenState()
+    initialState = VoteReceiptScreenState(),
+    onCreate = {
+        sendIntent(VoteReceiptScreenIntent.LoadReceipt(voteId, voterId))
+    }
 ) {
 
     override fun onIntent(intent: Any) {

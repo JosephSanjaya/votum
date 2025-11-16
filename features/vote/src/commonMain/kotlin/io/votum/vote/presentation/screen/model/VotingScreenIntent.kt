@@ -12,7 +12,9 @@ sealed interface VotingScreenIntent : NavigationIntent {
     data object ShowConfirmation : VotingScreenIntent
     data object DismissConfirmation : VotingScreenIntent
     data class ConfirmVote(val privateKey: String) : VotingScreenIntent
-    data class NavigateToReceipt(val voteId: String, val candidateName: String) : VotingScreenIntent
+    data class NavigateToReceipt(val voteId: String, val candidateName: String) :
+        VotingScreenIntent, NavigationIntent
+
     data object DismissError : VotingScreenIntent
     data class ShowError(val message: String) : VotingScreenIntent
 }

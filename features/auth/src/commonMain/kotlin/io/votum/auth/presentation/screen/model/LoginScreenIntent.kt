@@ -12,7 +12,7 @@ sealed class LoginScreenIntent {
     data class EmailChanged(val email: String) : LoginScreenIntent()
     data class PasswordChanged(val password: String) : LoginScreenIntent()
     data object NavigateToSignUp : LoginScreenIntent(), NavigationIntent
-    data object NavigateToDashboard : LoginScreenIntent(), NavigationIntent
+    data object NavigateToElectionList : LoginScreenIntent(), NavigationIntent
     data class LoginFailed(override val message: String) :
         LoginScreenIntent(),
         SnackbarVisuals by DefaultSnackBarVisuals(message)

@@ -10,13 +10,19 @@ import io.votum.vote.domain.usecase.CheckVotingEligibilityUseCase
 import io.votum.vote.presentation.screen.model.VotingScreenIntent
 import io.votum.vote.presentation.screen.model.VotingScreenState
 import org.koin.android.annotation.KoinViewModel
+import org.koin.core.annotation.InjectedParam
 
 @KoinViewModel
 class VotingViewModel(
+    @InjectedParam private val electionId: String,
+    @InjectedParam private val voterId: String,
     private val checkVotingEligibilityUseCase: CheckVotingEligibilityUseCase,
-    private val castVoteUseCase: CastVoteUseCase
+    private val castVoteUseCase: CastVoteUseCase,
 ) : BaseViewModel<VotingScreenState, Unit>(
-    initialState = VotingScreenState()
+    initialState = VotingScreenState(),
+    onCreate = {
+        sendIntent(VotingScreenIntent.LoadVotingStatus(electionId, voterId))
+    }
 ) {
 
     override fun onIntent(intent: Any) {
@@ -26,7 +32,6 @@ class VotingViewModel(
             is VotingScreenIntent.ShowConfirmation -> showConfirmation()
             is VotingScreenIntent.DismissConfirmation -> dismissConfirmation()
             is VotingScreenIntent.ConfirmVote -> confirmVote(intent.privateKey)
-            is VotingScreenIntent.NavigateToReceipt -> navigateToReceipt(intent.voteId, intent.candidateName)
             is VotingScreenIntent.DismissError -> dismissError()
         }
     }
@@ -142,10 +147,6 @@ class VotingViewModel(
                     )
                 }
             }
-    }
-
-    private fun navigateToReceipt(voteId: String, candidateName: String) = intent {
-        sendIntent(VotingScreenIntent.NavigateToReceipt(voteId, candidateName))
     }
 
     private fun dismissError() = intent {

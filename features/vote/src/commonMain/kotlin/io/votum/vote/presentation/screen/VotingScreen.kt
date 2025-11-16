@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -39,12 +40,17 @@ import io.votum.vote.presentation.screen.model.VotingScreenState
 import kotlinx.serialization.Serializable
 import io.votum.core.presentation.preview.VotumPreview
 import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parameterArrayOf
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun VotingScreen(
+    electionId: String,
+    voterId: String,
     modifier: Modifier = Modifier,
-    viewModel: VotingViewModel = koinViewModel()
+    viewModel: VotingViewModel = koinViewModel {
+        parameterArrayOf(electionId, voterId)
+    }
 ) {
     val state by viewModel.collectAsState()
 
@@ -93,6 +99,7 @@ private fun VotingScreenContent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp)
+                        .navigationBarsPadding()
                         .height(56.dp),
                     enabled = !state.isSubmittingVote
                 ) {

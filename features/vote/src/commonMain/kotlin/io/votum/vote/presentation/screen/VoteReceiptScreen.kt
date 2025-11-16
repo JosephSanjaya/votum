@@ -37,12 +37,17 @@ import io.votum.vote.presentation.screen.model.VoteReceiptScreenState
 import kotlinx.serialization.Serializable
 import io.votum.core.presentation.preview.VotumPreview
 import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun VoteReceiptScreen(
+    voteId: String,
+    voterId: String,
     modifier: Modifier = Modifier,
-    viewModel: VoteReceiptViewModel = koinViewModel()
+    viewModel: VoteReceiptViewModel = koinViewModel {
+        parametersOf(voteId, voterId)
+    }
 ) {
     val state by viewModel.collectAsState()
 
@@ -198,7 +203,7 @@ private fun VoteReceiptScreenContent(
 @Serializable
 data class VoteReceipt(
     val voteId: String,
-    val candidateName: String
+    val voterId: String
 )
 
 @VotumPreview

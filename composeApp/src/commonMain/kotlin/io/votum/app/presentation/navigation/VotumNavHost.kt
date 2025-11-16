@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import io.votum.app.presentation.screen.Splash
 import io.votum.app.presentation.screen.SplashScreen
+import io.votum.auth.data.local.AuthLocalDataSource
 import io.votum.auth.presentation.screen.Login
 import io.votum.auth.presentation.screen.LoginScreen
 import io.votum.core.presentation.component.rememberSnackBarHostState
@@ -31,6 +32,7 @@ import io.votum.result.presentation.screen.Result
 import io.votum.result.presentation.screen.ResultScreen
 import io.votum.result.presentation.screen.LiveResult
 import io.votum.result.presentation.screen.LiveResultScreen
+import org.koin.compose.koinInject
 
 @Composable
 fun VotumNavHost() {
@@ -64,11 +66,14 @@ fun VotumNavHost() {
             composable<Login> {
                 LoginScreen()
             }
-            composable<Voting> {
-                VotingScreen()
+            composable<Voting> { backStackEntry ->
+                val voting = backStackEntry.toRoute<Voting>()
+                val voterId = koinInject<AuthLocalDataSource>().getVoterData()?.voter?.id.orEmpty()
+                VotingScreen(voting.electionId, voterId)
             }
-            composable<VoteReceipt> {
-                VoteReceiptScreen()
+            composable<VoteReceipt> { backStackEntry ->
+                val data = backStackEntry.toRoute<VoteReceipt>()
+                VoteReceiptScreen(data.voteId, data.voterId)
             }
             composable<Result> { backStackEntry ->
                 val result = backStackEntry.toRoute<Result>()

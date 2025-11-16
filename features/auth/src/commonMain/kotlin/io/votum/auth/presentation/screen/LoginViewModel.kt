@@ -46,7 +46,7 @@ class LoginViewModel(
                 reduce {
                     state.copy(isLoading = false)
                 }
-                sendIntent(LoginScreenIntent.NavigateToDashboard)
+                sendIntent(LoginScreenIntent.NavigateToElectionList)
             }
             .onFailure {
                 reduce {
